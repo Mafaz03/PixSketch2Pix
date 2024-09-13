@@ -91,7 +91,6 @@ def main():
         if config.SAVE_MODEL and epoch % 5 == 0:
             save_checkpoint(generator, opt_gen, filename=config.CHECKPOINT_GEN)
             save_checkpoint(discriminator, opt_disc, filename=config.CHECKPOINT_DISC)
-        print("here")
         save_some_examples(generator, val_loader, epoch, folder="evaluation")
 
 
