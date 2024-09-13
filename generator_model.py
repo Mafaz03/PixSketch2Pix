@@ -22,25 +22,25 @@ class Generator(nn.Module):
         super().__init__()
 
         self.initial = nn.Sequential(
-            nn.Conv2d(in_channels, features, 4, 2, 1, padding_mode="reflect"),
+            nn.Conv2d(in_channels*2, features, 4, 2, 1, padding_mode="reflect"),
             nn.LeakyReLU(0.2)
         ) # 128
 
-        self.down1 = Block(features, features*2, down=True, act="leaky", use_dropout=False) # 64
-        self.down2 = Block(features*2, features*4, down=True, act="leaky", use_dropout=False) # 32
-        self.down3 = Block(features*4, features*8, down=True, act="leaky", use_dropout=False) # 16
-        self.down4 = Block(features*8, features*8, down=True, act="leaky", use_dropout=False) # 8
-        self.down5 = Block(features*8, features*8, down=True, act="leaky", use_dropout=False) # 4
-        self.down6 = Block(features*8, features*8, down=True, act="leaky", use_dropout=False) # 2
+        self.down1 = Block(features, features*2, down=True, act="relu", use_dropout=False) # 64
+        self.down2 = Block(features*2, features*4, down=True, act="relu", use_dropout=False) # 32
+        self.down3 = Block(features*4, features*8, down=True, act="relu", use_dropout=False) # 16
+        self.down4 = Block(features*8, features*8, down=True, act="relu", use_dropout=False) # 8
+        self.down5 = Block(features*8, features*8, down=True, act="relu", use_dropout=False) # 4
+        self.down6 = Block(features*8, features*8, down=True, act="relu", use_dropout=False) # 2
 
         self.bottleneck = nn.Sequential(
             nn.Conv2d(features*8, features*8, 4, 2, 1, padding_mode="reflect"),
             nn.ReLU() # 1
         )
 
-        self.up1 = Block(features*8, features*8, down=False, act="relu", use_dropout=True) # 2
-        self.up2 = Block(features*8*2, features*8, down=False, act="relu", use_dropout=True) # 4
-        self.up3 = Block(features*8*2, features*8, down=False, act="relu", use_dropout=True) # 8
+        self.up1 = Block(features*8, features*8, down=False, act="relu", use_dropout=False) # 2
+        self.up2 = Block(features*8*2, features*8, down=False, act="relu", use_dropout=False) # 4
+        self.up3 = Block(features*8*2, features*8, down=False, act="relu", use_dropout=False) # 8
         self.up4 = Block(features*8*2, features*8, down=False, act="relu", use_dropout=False) # 16
         self.up5 = Block(features*8*2, features*4, down=False, act="relu", use_dropout=False) # 32
         self.up6 = Block(features*4*2, features*2, down=False, act="relu", use_dropout=False) # 64
@@ -51,8 +51,8 @@ class Generator(nn.Module):
             nn.Tanh()
         )
     
-    def forward(self, x):
-        d1 = self.initial(x)
+    def forward(self, x, z):
+        d1 = self.initial(torch.cat([x,z], 1))
         d2 = self.down1(d1)
         d3 = self.down2(d2)
         d4 = self.down3(d3)

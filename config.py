@@ -3,8 +3,8 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-TRAIN_DIR = "data/maps/train"
-VAL_DIR = "data/maps/val"
+TRAIN_DIR = "Image_dataset/Train"
+VAL_DIR = "Image_dataset/Test"
 LEARNING_RATE = 2e-4
 BATCH_SIZE = 16
 NUM_WORKERS = 2
@@ -24,8 +24,14 @@ both_transform = A.Compose(
 
 transform_only_input = A.Compose(
     [
-        A.HorizontalFlip(p=0.5),
         A.ColorJitter(p=0.2),
+        A.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5], max_pixel_value=255.0,),
+        ToTensorV2(),
+    ]
+)
+
+transform_only_inter = A.Compose(
+    [
         A.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5], max_pixel_value=255.0,),
         ToTensorV2(),
     ]

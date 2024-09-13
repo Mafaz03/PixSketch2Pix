@@ -16,14 +16,15 @@ torch.backends.cudnn.benchmark = True
 def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler, d_scaler):
     loop = tqdm(train_loader, leave=True)
 
-    for idx, (x,y) in enumerate(loop):
+    for idx, (x,z,y) in enumerate(loop):
         x = x.to(config.DEVICE)
+        z = z.to(config.DEVICE)
         y = y.to(config.DEVICE)
 
 
         # Train Discriminator
         with torch.amp.autocast("cuda"):
-            y_fake = gen(x)
+            y_fake = gen(x, z)
 
             D_real = disc(x, y)
             D_real_loss = bce(D_real, torch.ones_like(D_real))
@@ -73,7 +74,7 @@ def main():
             config.CHECKPOINT_DISC, discriminator, opt_disc, config.LEARNING_RATE,
         )
     
-    train_dataset = MapDataset(root_dir="data/maps/train")
+    train_dataset = MapDataset(root_dir=config.TRAIN_DIR)
     train_loader = DataLoader(train_dataset, batch_size=config.BATCH_SIZE, shuffle=True, num_workers=config.NUM_WORKERS)
 
     g_scaler = torch.amp.GradScaler("cuda")

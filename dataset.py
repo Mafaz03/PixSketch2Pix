@@ -1,7 +1,8 @@
 import numpy as np
 from PIL import Image
 import os
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
+from torchvision.utils import save_image
 import config
 
 class MapDataset(Dataset):
@@ -19,14 +20,12 @@ class MapDataset(Dataset):
         image_path = self.list_files[index]
         file_path = os.path.join(self.root_dir, image_path)
         image = np.array(Image.open(file_path))
-        input_image = image[:, :600, :]
-        target_image = image[:, 600:, :]
-
-        augmentations = config.both_transform(image=input_image, image0=target_image)
-        input_image = augmentations["image"]
-        target_image = augmentations["image0"]
+        input_image = image[:, :256, :]
+        inter_image = image[:, 256:512, :]
+        target_image = image[:, 512:, :]
 
         input_image = config.transform_only_input(image=input_image)["image"]
+        inter_image = config.transform_only_input(image=inter_image)["image"]
         target_image = config.transform_only_mask(image=target_image)["image"]
 
-        return input_image, target_image
+        return input_image, inter_image, target_image
