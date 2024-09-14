@@ -5,7 +5,7 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision.utils import save_image
 import config
 
-class MapDataset(Dataset):
+class Image_dataset(Dataset):
     def __init__(self, root_dir):
         super().__init__()
 

@@ -3,7 +3,7 @@ from utils import save_checkpoint, load_checkpoint, save_some_examples
 import torch.nn as nn
 import torch.optim as optim
 import config
-from dataset import MapDataset
+from dataset import Image_dataset
 from generator_model import Generator
 from discriminator_model import Discriminator
 from torch.utils.data import DataLoader
@@ -74,13 +74,13 @@ def main():
             config.CHECKPOINT_DISC, discriminator, opt_disc, config.LEARNING_RATE,
         )
     
-    train_dataset = MapDataset(root_dir=config.TRAIN_DIR)
+    train_dataset = Image_dataset(root_dir=config.TRAIN_DIR)
     train_loader = DataLoader(train_dataset, batch_size=config.BATCH_SIZE, shuffle=True, num_workers=config.NUM_WORKERS)
 
     g_scaler = torch.amp.GradScaler("cuda")
     d_scaler = torch.amp.GradScaler("cuda")
     
-    val_dataset = MapDataset(root_dir=config.VAL_DIR)
+    val_dataset = Image_dataset(root_dir=config.VAL_DIR)
     val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False)
 
     for epoch in range(config.NUM_EPOCHS):
