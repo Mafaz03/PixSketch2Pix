@@ -1,6 +1,8 @@
 import torch
 import config
 from torchvision.utils import save_image
+import cv2
+import numpy as np
 
 def save_some_examples(gen, val_loader, epoch, folder):
     x, z, y = next(iter(val_loader))
@@ -35,3 +37,17 @@ def load_checkpoint(checkpoint_file, model, optimizer, lr):
     # and it will lead to many hours of debugging \:
     for param_group in optimizer.param_groups:
         param_group["lr"] = lr
+
+
+def image_to_line_art(image):
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    blurred_image = cv2.GaussianBlur(gray_image, (7, 7), 0)  # Larger kernel size for smoother lines
+    edges = cv2.Canny(blurred_image, threshold1=30, threshold2=100)
+    
+    dilated_edges = cv2.dilate(edges, kernel=np.ones((7, 7), np.uint8), iterations=1) # Thicker
+    
+    smooth_edges = cv2.GaussianBlur(dilated_edges, (5, 5), 0) # Smoother
+    line_art = cv2.bitwise_not(smooth_edges)
+    line_art_rgb = cv2.cvtColor(line_art, cv2.COLOR_GRAY2RGB)
+
+    return line_art_rgb
