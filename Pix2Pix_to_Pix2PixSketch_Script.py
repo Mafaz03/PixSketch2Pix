@@ -23,7 +23,7 @@ for folder in folders:
 
 
         input_resized = cv2.resize(input, (standard_size, standard_size))
-        line_art_resized = cv2.resize(image_to_line_art(target), (standard_size, standard_size))
+        line_art_resized = cv2.resize(image_to_line_art(input), (standard_size, standard_size))
         target_resized = cv2.resize(target, (standard_size, standard_size))
 
         canvas[:, :standard_size, ...] = input_resized

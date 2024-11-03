@@ -9,7 +9,7 @@ def save_some_examples(gen, val_loader, epoch, folder):
     x, z, y = x.to(config.DEVICE), z.to(config.DEVICE), y.to(config.DEVICE)
     gen.eval()
     with torch.no_grad():
-        y_fake = gen(x)
+        y_fake = gen(x, z)
         y_fake = y_fake * 0.5 + 0.5  # remove normalization
         save_image(y_fake, folder + f"/y_gen_{epoch}.png")
         save_image(x * 0.5 + 0.5, folder + f"/input_{epoch}.png")
@@ -39,12 +39,12 @@ def load_checkpoint(checkpoint_file, model, optimizer, lr):
         param_group["lr"] = lr
 
 
-def image_to_line_art(image):
+def image_to_line_art(image, thickenss=7):
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     blurred_image = cv2.GaussianBlur(gray_image, (7, 7), 0)  # Larger kernel size for smoother lines
     edges = cv2.Canny(blurred_image, threshold1=30, threshold2=100)
     
-    dilated_edges = cv2.dilate(edges, kernel=np.ones((7, 7), np.uint8), iterations=1) # Thicker
+    dilated_edges = cv2.dilate(edges, kernel=np.ones((thickenss, thickenss), np.uint8), iterations=1) # Thicker
     
     smooth_edges = cv2.GaussianBlur(dilated_edges, (5, 5), 0) # Smoother
     line_art = cv2.bitwise_not(smooth_edges)
