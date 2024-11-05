@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 standard_size = config.IMAGE_SIZE
 
-folders = ["image_dataset/drones_600/train", "image_dataset/drones_600/val"]
+folders = ["image_dataset/drones_512/train", "image_dataset/drones_512/val"]
 
 orignal_size = 600
 threshold = 249
@@ -22,7 +22,7 @@ for folder in folders:
         target = np.array(Image.open(image_pth))[:, orignal_size:, ...]
 
         input_resized = cv2.resize(input, (standard_size, standard_size))
-        line_art_resized = cv2.resize(image_to_line_art(input), (standard_size, standard_size))
+        line_art_resized = cv2.resize(image_to_line_art(input, thickenss=1), (standard_size, standard_size))
         target_resized = cv2.resize(target, (standard_size, standard_size))
 
         black_mask = np.all(line_art_resized <= threshold, axis=-1)

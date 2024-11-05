@@ -69,3 +69,11 @@ class Generator(nn.Module):
         up6 = self.up6(torch.cat([up5, d3], 1))
         up7 = self.up7(torch.cat([up6, d2], 1))
         return self.finalup(torch.cat([up7, d1], 1))
+
+## Testing
+if __name__ == "__main__":
+    gen = Generator()
+    x = torch.rand(2, 3, 512, 512)
+    z = torch.rand(2, 3, 512, 512)
+    result = gen(x, z)
+    print(result.shape)
