@@ -61,3 +61,10 @@ class Discriminator(nn.Module):
         print(X.shape)
         return self.all(X)
         
+## Testing
+if __name__ == "__main__":
+    gen = Discriminator()
+    x = torch.rand(2, 3, 512, 512)
+    z = torch.rand(2, 3, 512, 512)
+    result = gen(x, z)
+    print(result.shape)

@@ -9,6 +9,7 @@ from discriminator_model import Discriminator
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from torchvision.utils import save_image
+import wandb
 
 torch.backends.cudnn.benchmark = True
 
@@ -82,7 +83,7 @@ def main():
     
     val_dataset = Image_dataset(root_dir=config.VAL_DIR)
     val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False)
-
+    wandb.init()
     for epoch in range(config.NUM_EPOCHS):
         print("Epoch: ", epoch)
         train_fn(

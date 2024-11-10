@@ -1,0 +1,16 @@
+Epoch:  0
+  0%|                                                                                                                                       | 0/69 [00:00<?, ?it/s]/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/torch/amp/autocast_mode.py:265: UserWarning: User provided device_type of 'cuda', but CUDA is not available. Disabling
+  warnings.warn(
+  0%|                                                                                                                                       | 0/69 [01:49<?, ?it/s]
+Traceback (most recent call last):
+  File "/Users/mohamedmafaz/Desktop/PixSketch2Pix/train_with_style_loss.py", line 126, in <module>
+    main()
+  File "/Users/mohamedmafaz/Desktop/PixSketch2Pix/train_with_style_loss.py", line 115, in main
+    train_fn(
+  File "/Users/mohamedmafaz/Desktop/PixSketch2Pix/train_with_style_loss.py", line 60, in train_fn
+    style_loss = calc_style_loss(gen, x, z, y)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mohamedmafaz/Desktop/PixSketch2Pix/train_with_style_loss.py", line 27, in calc_style_loss
+    generated_gram_matrix = generated_feature.view(channel, height*width).mm(
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: shape '[64, 262144]' is invalid for input of size 268435456

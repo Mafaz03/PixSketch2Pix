@@ -1,0 +1,16 @@
+{"time":"2024-11-10T18:25:28.82131+05:30","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-11-10T18:25:28.821345+05:30","level":"INFO","msg":"created symlink","path":"/Users/mohamedmafaz/Desktop/PixSketch2Pix/wandb/run-20241110_182528-ywwffvfn/logs/debug-core.log"}
+{"time":"2024-11-10T18:25:28.933287+05:30","level":"INFO","msg":"created new stream","id":"ywwffvfn"}
+{"time":"2024-11-10T18:25:28.933339+05:30","level":"INFO","msg":"stream: started","id":"ywwffvfn"}
+{"time":"2024-11-10T18:25:28.933377+05:30","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"ywwffvfn"}}
+{"time":"2024-11-10T18:25:28.933449+05:30","level":"INFO","msg":"sender: started","stream_id":"ywwffvfn"}
+{"time":"2024-11-10T18:25:28.933461+05:30","level":"INFO","msg":"handler: started","stream_id":{"value":"ywwffvfn"}}
+{"time":"2024-11-10T18:25:29.29964+05:30","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-11-10T18:27:19.249899+05:30","level":"INFO","msg":"stream: closing","id":"ywwffvfn"}
+{"time":"2024-11-10T18:27:19.251692+05:30","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-11-10T18:27:19.258741+05:30","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-11-10T18:27:20.890344+05:30","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-11-10T18:27:21.206227+05:30","level":"INFO","msg":"handler: closed","stream_id":{"value":"ywwffvfn"}}
+{"time":"2024-11-10T18:27:21.206261+05:30","level":"INFO","msg":"sender: closed","stream_id":"ywwffvfn"}
+{"time":"2024-11-10T18:27:21.206251+05:30","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"ywwffvfn"}}
+{"time":"2024-11-10T18:27:21.206466+05:30","level":"INFO","msg":"stream: closed","id":"ywwffvfn"}

@@ -1,0 +1,16 @@
+{"time":"2024-11-10T18:21:10.804306+05:30","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-11-10T18:21:10.804355+05:30","level":"INFO","msg":"created symlink","path":"/Users/mohamedmafaz/Desktop/PixSketch2Pix/wandb/run-20241110_182110-vszy07yj/logs/debug-core.log"}
+{"time":"2024-11-10T18:21:11.134603+05:30","level":"INFO","msg":"created new stream","id":"vszy07yj"}
+{"time":"2024-11-10T18:21:11.134827+05:30","level":"INFO","msg":"stream: started","id":"vszy07yj"}
+{"time":"2024-11-10T18:21:11.135206+05:30","level":"INFO","msg":"sender: started","stream_id":"vszy07yj"}
+{"time":"2024-11-10T18:21:11.135043+05:30","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"vszy07yj"}}
+{"time":"2024-11-10T18:21:11.135091+05:30","level":"INFO","msg":"handler: started","stream_id":{"value":"vszy07yj"}}
+{"time":"2024-11-10T18:21:11.573071+05:30","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-11-10T18:21:17.588238+05:30","level":"INFO","msg":"stream: closing","id":"vszy07yj"}
+{"time":"2024-11-10T18:21:17.590871+05:30","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-11-10T18:21:17.598984+05:30","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-11-10T18:21:22.426169+05:30","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-11-10T18:21:22.743762+05:30","level":"INFO","msg":"handler: closed","stream_id":{"value":"vszy07yj"}}
+{"time":"2024-11-10T18:21:22.743776+05:30","level":"INFO","msg":"sender: closed","stream_id":"vszy07yj"}
+{"time":"2024-11-10T18:21:22.743771+05:30","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"vszy07yj"}}
+{"time":"2024-11-10T18:21:22.74389+05:30","level":"INFO","msg":"stream: closed","id":"vszy07yj"}

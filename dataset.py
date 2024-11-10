@@ -20,9 +20,9 @@ class Image_dataset(Dataset):
         image_path = self.list_files[index]
         file_path = os.path.join(self.root_dir, image_path)
         image = np.array(Image.open(file_path))
-        input_image = image[:, :256, :]
-        inter_image = image[:, 256:512, :]
-        target_image = image[:, 512:, :]
+        input_image = image[:, :config.IMAGE_SIZE, :]
+        inter_image = image[:, config.IMAGE_SIZE:config.IMAGE_SIZE*2, :]
+        target_image = image[:, config.IMAGE_SIZE*2:, :]
 
         input_image = config.transform_only_input(image=input_image)["image"]
         inter_image = config.transform_only_input(image=inter_image)["image"]
