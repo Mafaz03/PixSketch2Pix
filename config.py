@@ -8,6 +8,7 @@ TRAIN_DIR = "Image_dataset/maps/train"
 VAL_DIR = "Image_dataset/maps/val"
 LEARNING_RATE = 2e-4
 BATCH_SIZE = 16
+VAL_BATCH_SIZE = 5
 NUM_WORKERS = 2
 IMAGE_SIZE = 512
 CHANNELS_IMG = 3
