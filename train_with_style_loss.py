@@ -108,7 +108,7 @@ def main():
     d_scaler = torch.amp.GradScaler("cuda")
     
     val_dataset = Image_dataset(root_dir=config.VAL_DIR)
-    val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False)
+    val_loader = DataLoader(val_dataset, batch_size=config.VAL_BATCH_SIZE, shuffle=False)
     wandb.init()
     for epoch in range(config.NUM_EPOCHS):
         print("Epoch: ", epoch)
