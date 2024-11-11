@@ -15,9 +15,9 @@ vgg_model = VGG().to(config.DEVICE).eval()
 
 torch.backends.cudnn.benchmark = True
 
-def calc_style_loss(generator, x, z, y):
+def calc_style_loss(y_fake, y):
     s_loss = 0
-    generated_features = vgg_model(generator(x, z) * 0.5 + 0.5) # Remove unsqueeze when actuall training
+    generated_features = vgg_model(y_fake * 0.5 + 0.5) # Remove unsqueeze when actuall training
     style_image_features = vgg_model(y)
 
     for generated_feature, style_image_feature in zip(generated_features, style_image_features):
@@ -48,21 +48,14 @@ def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler,
         # Train Discriminator
         with torch.amp.autocast("cuda"):
             y_fake = gen(x, z)
-
             D_real = disc(x, y)
             D_real_loss = bce(D_real, torch.ones_like(D_real))
-
             D_fake = disc(x, y_fake.detach())
             D_fake_loss = bce(D_fake, torch.zeros_like(D_real))
-
             D_loss = (D_real_loss + D_fake_loss) / 2
 
-            style_loss = calc_style_loss(gen, x, z, y)
-
-        total_loss = config.ALPHA * D_loss + config.BETA * style_loss
-
         disc.zero_grad()
-        d_scaler.scale(total_loss).backward()
+        d_scaler.scale(D_loss).backward()
         d_scaler.step(opt_disc)
         d_scaler.update()
 
@@ -71,9 +64,11 @@ def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler,
             G_fake_loss = bce(D_fake, torch.ones_like(D_fake))
             L1 = l1_loss(y_fake, y) * config.L1_LAMBDA
             G_loss = G_fake_loss + L1
+            style_loss_G = calc_style_loss(y_fake, y)
 
+        total_loss = config.ALPHA * G_loss + config.BETA * style_loss_G
         gen.zero_grad()
-        g_scaler.scale(G_loss).backward()
+        g_scaler.scale(total_loss).backward()
         g_scaler.step(opt_gen)
         g_scaler.update()
 
