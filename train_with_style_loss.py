@@ -65,8 +65,8 @@ def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler,
             L1 = l1_loss(y_fake, y) * config.L1_LAMBDA
             G_loss = G_fake_loss + L1
             style_loss_G = calc_style_loss(y_fake, y)
+            total_loss = config.ALPHA * G_loss + config.BETA * style_loss_G
 
-        total_loss = config.ALPHA * G_loss + config.BETA * style_loss_G
         gen.zero_grad()
         g_scaler.scale(total_loss).backward()
         g_scaler.step(opt_gen)
@@ -76,6 +76,9 @@ def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler,
             loop.set_postfix(
                 D_real=torch.sigmoid(D_real).mean().item(),
                 D_fake=torch.sigmoid(D_fake).mean().item(),
+                G_loss=G_loss.item(),
+                style_loss_G=style_loss_G.item(),
+                total_loss=total_loss.item()
             )
 
 def main():
