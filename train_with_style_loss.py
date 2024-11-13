@@ -26,14 +26,24 @@ def calc_style_loss(y_fake, y):
         generated_feature = generated_feature.view(batch_size, channel, height * width)
         style_image_feature = style_image_feature.view(batch_size, channel, height * width)
 
+        generated_feature = torch.nn.functional.normalize(generated_feature, p=2, dim=-1)
+        style_image_feature = torch.nn.functional.normalize(style_image_feature, p=2, dim=-1)
+
         # Compute Gram matrices for each image in the batch
         generated_gram_matrix = torch.bmm(generated_feature, generated_feature.transpose(1, 2))
         style_gram_matrix = torch.bmm(style_image_feature, style_image_feature.transpose(1, 2))
-
+      
         # Compute style loss for the whole batch
-        s_loss += torch.mean((generated_gram_matrix - style_gram_matrix) ** 2)
+        # generated_gram_matrix = generated_gram_matrix.to('cpu')
+        # style_gram_matrix = style_gram_matrix.to('cpu')
 
+        diff = generated_gram_matrix-style_gram_matrix
+        
+        s_loss += torch.mean(((diff)**2).float()).half() # HALF PRECISION WAS CAUSING NAN EROR (2 days to fix)
+
+    # import pdb; pdb.set_trace()
     return s_loss
+
 
 
 def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler, d_scaler):
