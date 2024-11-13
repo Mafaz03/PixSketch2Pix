@@ -25,12 +25,12 @@ ALPHA = 1
 BETA = 0.01
 
 both_transform = A.Compose(
-    [A.Resize(width=config.IMAGE_SIZE, height=config.IMAGE_SIZE),], additional_targets={"image0": "image"},
+    [A.Resize(width=IMAGE_SIZE, height=IMAGE_SIZE),], additional_targets={"image0": "image"},
 )
 
 transform_only_input = A.Compose(
     [
-        A.Resize(width=config.IMAGE_SIZE, height=config.IMAGE_SIZE),
+        A.Resize(width=IMAGE_SIZE, height=IMAGE_SIZE),
         A.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5], max_pixel_value=255.0,),
         ToTensorV2(),
     ]
@@ -38,7 +38,7 @@ transform_only_input = A.Compose(
 
 transform_only_inter = A.Compose(
     [
-        A.Resize(width=config.IMAGE_SIZE, height=config.IMAGE_SIZE),
+        A.Resize(width=IMAGE_SIZE, height=IMAGE_SIZE),
         A.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5], max_pixel_value=255.0,),
         ToTensorV2(),
     ]
@@ -46,7 +46,7 @@ transform_only_inter = A.Compose(
 
 transform_only_mask = A.Compose(
     [
-        A.Resize(width=config.IMAGE_SIZE, height=config.IMAGE_SIZE),
+        A.Resize(width=IMAGE_SIZE, height=IMAGE_SIZE),
         A.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5], max_pixel_value=255.0,),
         ToTensorV2(),
     ]
