@@ -83,12 +83,29 @@ def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler,
         g_scaler.update()
 
         if idx % 10 == 0:
+
+
+            D_real_mean = torch.sigmoid(D_real).mean().item()
+            D_fake_mean = torch.sigmoid(D_fake).mean().item()
+            G_loss_val = G_loss.item()
+            style_loss_G_val = style_loss_G.item()
+            total_loss_val = total_loss.item()
+
+            wandb.log({
+                "D_real": D_real_mean,
+                "D_fake": D_fake_mean,
+                "G_loss": G_loss_val,
+                "style_loss_G": style_loss_G_val,
+                "total_loss": total_loss_val
+            })
+
+            # Update tqdm progress bar with metrics
             loop.set_postfix(
-                D_real=torch.sigmoid(D_real).mean().item(),
-                D_fake=torch.sigmoid(D_fake).mean().item(),
-                G_loss=G_loss.item(),
-                style_loss_G=style_loss_G.item(),
-                total_loss=total_loss.item()
+                D_real=D_real_mean,
+                D_fake=D_fake_mean,
+                G_loss=G_loss_val,
+                style_loss_G=style_loss_G_val,
+                total_loss=total_loss_val,
             )
 
 def main():
