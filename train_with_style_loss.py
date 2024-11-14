@@ -47,7 +47,7 @@ def calc_style_loss(y_fake, y):
 
 
 def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler, d_scaler):
-    loop = tqdm(train_loader, leave=True)
+    loop = tqdm(train_loader, leave=True, total=len(train_loader))
 
     for idx, (x,z,y) in enumerate(loop):
         x = x.to(config.DEVICE)
