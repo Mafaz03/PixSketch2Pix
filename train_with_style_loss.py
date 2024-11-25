@@ -57,7 +57,7 @@ def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler,
 
         # Train Discriminator
         with torch.amp.autocast("cuda"):
-            y_fake = gen(x, z)
+            y_fake = gen(x, z1=z)
             D_real = disc(x, y)
             D_real_loss = bce(D_real, torch.ones_like(D_real))
             D_fake = disc(x, y_fake.detach())
@@ -110,7 +110,7 @@ def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler,
 
 def main():
     discriminator = Discriminator(in_channels=3).to(config.DEVICE)
-    generator = Generator(in_channels=3, features=64).to(config.DEVICE)
+    generator = Generator(in_channels=3, inter_images=1, features=64).to(config.DEVICE)
 
     opt_disc = optim.Adam(discriminator.parameters(), lr=config.LEARNING_RATE, betas=(0.5, 0.999))
     opt_gen = optim.Adam(generator.parameters(), lr=config.LEARNING_RATE, betas=(0.5, 0.999))
