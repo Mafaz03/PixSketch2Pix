@@ -59,10 +59,12 @@ class Image_dataset(Dataset):
         for idx, inter_image in enumerate(inter_image_dict.values()):
             inter_image_dict[idx] = config.transform_only_input(image=inter_image)["image"]
         
-        target_image = config.transform_only_mask(image=target_image)["image"]
+        
 
-        if self.binarize: return (input_image, *list(inter_image_dict.values()),  
-                         config.transform_only_mask_binarize(image=target_image)["image"])
+        if self.binarize:  
+            target_image = config.transform_only_mask_binarize(image=target_image)["image"]
+        else:
+            target_image = config.transform_only_mask(image=target_image)["image"]
         
         if self.grayscale_all: 
             input_image = to_grayscale(input_image)
