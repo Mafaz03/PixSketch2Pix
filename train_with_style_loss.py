@@ -11,6 +11,8 @@ from tqdm import tqdm
 from torchvision.utils import save_image
 import wandb
 from VGG import VGG
+from torchmetrics.classification import Dice
+
 vgg_model = VGG().to(config.DEVICE).eval()
 
 torch.backends.cudnn.benchmark = True
@@ -44,20 +46,28 @@ def calc_style_loss(y_fake, y):
     # import pdb; pdb.set_trace()
     return s_loss
 
+def calc_dice_score(y_fake, y):
+    y_fake = (y_fake / 255 > 0.5) * 1
+    y = (y / 255 > 0.5) * 1
+
+    dice = Dice(average='micro')
+    dice(y_fake, y)
 
 
 def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler, d_scaler):
     loop = tqdm(train_loader, leave=True, total=len(train_loader))
 
-    for idx, (x,z,y) in enumerate(loop):
+    for idx, (x,z1,z2,z3,z4,y) in enumerate(loop):
         x = x.to(config.DEVICE)
-        z = z.to(config.DEVICE)
+        z1 = z1.to(config.DEVICE)
+        z2 = z2.to(config.DEVICE)
+        z3 = z3.to(config.DEVICE)
+        z4 = z4.to(config.DEVICE)
         y = y.to(config.DEVICE)
-
 
         # Train Discriminator
         with torch.amp.autocast("cuda"):
-            y_fake = gen(x, z1=z)
+            y_fake = gen(x, z1=z1, z2=z2, z3=z3, z4=z4)
             D_real = disc(x, y)
             D_real_loss = bce(D_real, torch.ones_like(D_real))
             D_fake = disc(x, y_fake.detach())
@@ -75,6 +85,7 @@ def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler,
             L1 = l1_loss(y_fake, y) * config.L1_LAMBDA
             G_loss = G_fake_loss + L1
             style_loss_G = calc_style_loss(y_fake, y)
+            dice_score_G = calc_style_loss(y_fake, y)
             total_loss = config.ALPHA * G_loss + config.BETA * style_loss_G
 
         gen.zero_grad()
@@ -89,6 +100,7 @@ def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler,
             D_fake_mean = torch.sigmoid(D_fake).mean().item()
             G_loss_val = G_loss.item()
             style_loss_G_val = style_loss_G.item()
+            dice_score_G_val = round(dice_score_G.item(), 3)
             total_loss_val = total_loss.item()
 
             wandb.log({
@@ -96,6 +108,7 @@ def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler,
                 "D_fake": D_fake_mean,
                 "G_loss": G_loss_val,
                 "style_loss_G": style_loss_G_val,
+                "dice_score_G_val": dice_score_G_val,
                 "total_loss": total_loss_val
             })
 
@@ -105,12 +118,13 @@ def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler,
                 D_fake=D_fake_mean,
                 G_loss=G_loss_val,
                 style_loss_G=style_loss_G_val,
+                dice_score_G_val= dice_score_G_val,
                 total_loss=total_loss_val,
             )
 
 def main():
     discriminator = Discriminator(in_channels=3).to(config.DEVICE)
-    generator = Generator(in_channels=3, inter_images=1, features=64).to(config.DEVICE)
+    generator = Generator(in_channels=3, inter_images=4, features=64).to(config.DEVICE)
 
     opt_disc = optim.Adam(discriminator.parameters(), lr=config.LEARNING_RATE, betas=(0.5, 0.999))
     opt_gen = optim.Adam(generator.parameters(), lr=config.LEARNING_RATE, betas=(0.5, 0.999))
@@ -126,13 +140,13 @@ def main():
             config.CHECKPOINT_DISC, discriminator, opt_disc, config.LEARNING_RATE,
         )
     
-    train_dataset = Image_dataset(root_dir=config.TRAIN_DIR)
+    train_dataset = Image_dataset(root_dir=config.TRAIN_DIR, inter_images=4)
     train_loader = DataLoader(train_dataset, batch_size=config.BATCH_SIZE, shuffle=True, num_workers=config.NUM_WORKERS)
 
     g_scaler = torch.amp.GradScaler("cuda")
     d_scaler = torch.amp.GradScaler("cuda")
     
-    val_dataset = Image_dataset(root_dir=config.VAL_DIR)
+    val_dataset = Image_dataset(root_dir=config.VAL_DIR, inter_images=4)
     val_loader = DataLoader(val_dataset, batch_size=config.VAL_BATCH_SIZE, shuffle=False)
     wandb.init()
     for epoch in range(config.NUM_EPOCHS):

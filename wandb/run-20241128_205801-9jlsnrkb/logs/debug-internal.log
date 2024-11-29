@@ -1,0 +1,16 @@
+{"time":"2024-11-28T20:58:01.413389+05:30","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-11-28T20:58:01.413426+05:30","level":"INFO","msg":"created symlink","path":"/Users/mohamedmafaz/Desktop/PixSketch2Pix/wandb/run-20241128_205801-9jlsnrkb/logs/debug-core.log"}
+{"time":"2024-11-28T20:58:01.625196+05:30","level":"INFO","msg":"created new stream","id":"9jlsnrkb"}
+{"time":"2024-11-28T20:58:01.625244+05:30","level":"INFO","msg":"stream: started","id":"9jlsnrkb"}
+{"time":"2024-11-28T20:58:01.625329+05:30","level":"INFO","msg":"sender: started","stream_id":"9jlsnrkb"}
+{"time":"2024-11-28T20:58:01.625268+05:30","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"9jlsnrkb"}}
+{"time":"2024-11-28T20:58:01.625314+05:30","level":"INFO","msg":"handler: started","stream_id":{"value":"9jlsnrkb"}}
+{"time":"2024-11-28T20:58:02.157548+05:30","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-11-28T20:58:12.648886+05:30","level":"INFO","msg":"stream: closing","id":"9jlsnrkb"}
+{"time":"2024-11-28T20:58:12.649128+05:30","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-11-28T20:58:12.650253+05:30","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-11-28T20:58:16.97223+05:30","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-11-28T20:58:17.310764+05:30","level":"INFO","msg":"handler: closed","stream_id":{"value":"9jlsnrkb"}}
+{"time":"2024-11-28T20:58:17.310883+05:30","level":"INFO","msg":"sender: closed","stream_id":"9jlsnrkb"}
+{"time":"2024-11-28T20:58:17.310778+05:30","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"9jlsnrkb"}}
+{"time":"2024-11-28T20:58:17.311113+05:30","level":"INFO","msg":"stream: closed","id":"9jlsnrkb"}

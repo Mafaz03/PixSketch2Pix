@@ -76,8 +76,8 @@ class Generator(nn.Module):
         z_concat = torch.cat([v for v in z.values()], dim=1)
         x_repeat = x.repeat(1, z_concat.shape[1]//x.shape[1], 1, 1)
 
-        print("z_concat: ", z_concat.shape)
-        print("x_repeat: ", x_repeat.shape)
+        # print("z_concat: ", z_concat.shape)
+        # print("x_repeat: ", x_repeat.shape)
 
         input_tensor = torch.cat([x_repeat, z_concat], dim=1)
 
@@ -126,21 +126,26 @@ class Generator(nn.Module):
 
         r13 = self.res13(up7)
 
-        print("r13: ", r13.shape)
-        print("d1: ", d1.shape)
+        # print("r13: ", r13.shape)
+        # print("d1: ", d1.shape)
 
         return self.finalup(torch.cat([r13, d1], 1))
 
 ## Testing
 if __name__ == "__main__":
     gen = Generator(in_channels=3, inter_images=4, out_channels=None)
-    x = torch.rand(2, 3, 512, 512)
-    z1 = torch.rand(2, 3, 512, 512)
-    z2 = torch.rand(2, 3, 512, 512)
-    z3 = torch.rand(2, 3, 512, 512)
-    z4 = torch.rand(2, 3, 512, 512)
-    result = gen(x, z1=z1, z2=z2, z3=z3, z4=z4)
-    print("Output: ", result.shape)
+    for i in range(50, 520):
+        a = i
+        try:
+            x = torch.rand(2, 3, a, a)
+            z1 = torch.rand(2, 3, a, a)
+            z2 = torch.rand(2, 3, a, a)
+            z3 = torch.rand(2, 3, a, a)
+            z4 = torch.rand(2, 3, a, a)
+            result = gen(x, z1=z1, z2=z2, z3=z3, z4=z4)
+            print("Output: ", result.shape)
+            print(f"YES: {i}")
+        except: print(f"NO: {i}")
 
-    total_params = sum(p.numel() for p in gen.parameters())
-    print(f"Number of parameters: {total_params}")
+    # total_params = sum(p.numel() for p in gen.parameters())
+    # print(f"Number of parameters: {total_params}")

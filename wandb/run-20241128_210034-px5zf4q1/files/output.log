@@ -1,0 +1,4 @@
+Epoch:  0
+  0%|                                                                                                                                               | 0/3007 [00:00<?, ?it/s]/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/torch/amp/autocast_mode.py:265: UserWarning: User provided device_type of 'cuda', but CUDA is not available. Disabling
+  warnings.warn(
+  0%|                               | 7/3007 [00:31<3:25:54,  4.12s/it, D_fake=0.424, D_real=0.498, G_loss=60.3, dice_score_G_val=0.604, style_loss_G=0.604, total_loss=60.3]

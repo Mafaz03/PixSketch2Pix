@@ -1,0 +1,39 @@
+{
+  "os": "macOS-15.0-arm64-arm-64bit",
+  "python": "3.11.5",
+  "startedAt": "2024-11-28T12:16:42.365712Z",
+  "program": "/Users/mohamedmafaz/Desktop/PixSketch2Pix/train_with_style_loss.py",
+  "codePath": "train_with_style_loss.py",
+  "git": {
+    "remote": "https://github.com/Mafaz03/PixSketch2Pix",
+    "commit": "888dc1109bf47daf178b9db604f53a8496891d0d"
+  },
+  "email": "mohdmafaz200303@gmail.com",
+  "root": "/Users/mohamedmafaz/Desktop/PixSketch2Pix",
+  "host": "Mohameds-MacBook-Air-2.local",
+  "username": "mohamedmafaz",
+  "executable": "/usr/local/bin/python3",
+  "codePathLocal": "train_with_style_loss.py",
+  "cpu_count": 8,
+  "cpu_count_logical": 8,
+  "disk": {
+    "/": {
+      "total": "245107195904",
+      "used": "139168337920"
+    }
+  },
+  "memory": {
+    "total": "8589934592"
+  },
+  "cpu": {
+    "count": 8,
+    "countLogical": 8
+  },
+  "apple": {
+    "name": "Apple M2",
+    "ecpuCores": 4,
+    "pcpuCores": 4,
+    "gpuCores": 10,
+    "memoryGb": 8
+  }
+}

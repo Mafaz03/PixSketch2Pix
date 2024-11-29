@@ -1,0 +1,11 @@
+Epoch:  0
+  0%|                                                                                                                                               | 0/3008 [00:16<?, ?it/s]
+Traceback (most recent call last):
+  File "/Users/mohamedmafaz/Desktop/PixSketch2Pix/train_with_style_loss.py", line 165, in <module>
+    main()
+  File "/Users/mohamedmafaz/Desktop/PixSketch2Pix/train_with_style_loss.py", line 154, in main
+    train_fn(
+  File "/Users/mohamedmafaz/Desktop/PixSketch2Pix/train_with_style_loss.py", line 60, in train_fn
+    for idx, (x,z1,z2,z3,z4,y) in enumerate(loop):
+             ^^^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 6, got 3)

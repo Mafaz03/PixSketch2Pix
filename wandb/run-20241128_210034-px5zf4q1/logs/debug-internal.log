@@ -1,0 +1,8 @@
+{"time":"2024-11-28T21:00:34.047674+05:30","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-11-28T21:00:34.047707+05:30","level":"INFO","msg":"created symlink","path":"/Users/mohamedmafaz/Desktop/PixSketch2Pix/wandb/run-20241128_210034-px5zf4q1/logs/debug-core.log"}
+{"time":"2024-11-28T21:00:34.15751+05:30","level":"INFO","msg":"created new stream","id":"px5zf4q1"}
+{"time":"2024-11-28T21:00:34.157547+05:30","level":"INFO","msg":"stream: started","id":"px5zf4q1"}
+{"time":"2024-11-28T21:00:34.157587+05:30","level":"INFO","msg":"sender: started","stream_id":"px5zf4q1"}
+{"time":"2024-11-28T21:00:34.157572+05:30","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"px5zf4q1"}}
+{"time":"2024-11-28T21:00:34.157695+05:30","level":"INFO","msg":"handler: started","stream_id":{"value":"px5zf4q1"}}
+{"time":"2024-11-28T21:00:34.539693+05:30","level":"INFO","msg":"Starting system monitor"}
