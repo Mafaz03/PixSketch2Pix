@@ -5,11 +5,34 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision.utils import save_image
 import config
 
+def to_grayscale(image_tensor):
+    """
+    Converts an RGB image tensor to grayscale with a single channel.
+    Args:
+        image_tensor (torch.Tensor): Tensor of shape (C, H, W) or (N, C, H, W)
+    Returns:
+        torch.Tensor: Grayscale tensor of shape (1, H, W) or (N, 1, H, W)
+    """
+    if len(image_tensor.shape) == 4:  # Batch of images
+        r, g, b = image_tensor[:, 0, :, :], image_tensor[:, 1, :, :], image_tensor[:, 2, :, :]
+        gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
+        return gray.unsqueeze(1)  # Add channel dim
+    
+    elif len(image_tensor.shape) == 3:  # Single image
+        r, g, b = image_tensor[0, :, :], image_tensor[1, :, :], image_tensor[2, :, :]
+        gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
+        return gray.unsqueeze(0)  # Add channel dim
+    
+    else:
+        raise ValueError("Expected input to have 3 or 4 dimensions.")
+
 class Image_dataset(Dataset):
-    def __init__(self, root_dir, inter_images=1, binarize=False):
+    def __init__(self, root_dir, inter_images=1, binarize_output=False, grayscale_all=False):
+    
         super().__init__()
 
-        self.binarize = binarize
+        self.binarize = binarize_output
+        self.grayscale_all = grayscale_all
         self.root_dir = root_dir
         self.list_files = os.listdir(root_dir)
         self.inter_images = inter_images 
@@ -36,16 +59,22 @@ class Image_dataset(Dataset):
         for idx, inter_image in enumerate(inter_image_dict.values()):
             inter_image_dict[idx] = config.transform_only_input(image=inter_image)["image"]
         
+        target_image = config.transform_only_mask(image=target_image)["image"]
+
         if self.binarize: return (input_image, *list(inter_image_dict.values()),  
                          config.transform_only_mask_binarize(image=target_image)["image"])
         
-        target_image = config.transform_only_mask(image=target_image)["image"]
-
+        if self.grayscale_all: 
+            input_image = to_grayscale(input_image)
+            inter_image_dict = {inter_image_dict[i]: to_grayscale(inter_image_dict[i]) for i in inter_image_dict}
+            target_image = to_grayscale(target_image)
+        
+        
         return input_image, *list(inter_image_dict.values()), target_image
     
 ## Testing
 if __name__ == "__main__":
-    ds = Image_dataset(root_dir="image_dataset/landslide/Train", inter_images=4, binarize = True)
+    ds = Image_dataset(root_dir="image_dataset/landslide/Train", inter_images=4, binarize_output = True, grayscale_all=True)
     dl = DataLoader(ds)
 
     x, z1, z2, z3, z4, y = next(iter(dl))

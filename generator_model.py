@@ -133,19 +133,16 @@ class Generator(nn.Module):
 
 ## Testing
 if __name__ == "__main__":
-    gen = Generator(in_channels=3, inter_images=4, out_channels=None)
-    for i in range(50, 520):
-        a = i
-        try:
-            x = torch.rand(2, 3, a, a)
-            z1 = torch.rand(2, 3, a, a)
-            z2 = torch.rand(2, 3, a, a)
-            z3 = torch.rand(2, 3, a, a)
-            z4 = torch.rand(2, 3, a, a)
-            result = gen(x, z1=z1, z2=z2, z3=z3, z4=z4)
-            print("Output: ", result.shape)
-            print(f"YES: {i}")
-        except: print(f"NO: {i}")
+    gen = Generator(in_channels=1, inter_images=4, out_channels=1)
+    a = 256
+    x = torch.rand(2, 1, a, a)
+    z1 = torch.rand(2, 1, a, a)
+    z2 = torch.rand(2, 1, a, a)
+    z3 = torch.rand(2, 1, a, a)
+    z4 = torch.rand(2, 1, a, a)
+    result = gen(x, z1=z1, z2=z2, z3=z3, z4=z4)
+    print("Output: ", result.shape)
+
 
     # total_params = sum(p.numel() for p in gen.parameters())
     # print(f"Number of parameters: {total_params}")

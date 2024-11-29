@@ -61,3 +61,10 @@ class Discriminator(nn.Module):
         # print(X.shape)
         return self.all(X)
         
+# Test
+if __name__ == "__main__":
+    disc = Discriminator(in_channels=3)
+    x = torch.rand(5,3,256,256)
+    y = torch.rand(5,3,256,256)
+    output = disc(x, y)
+    print(output.shape)
