@@ -12,8 +12,8 @@ def save_some_examples(gen, val_loader, epoch, folder):
     gen.eval()
     with torch.no_grad():
         y_fake =  gen(x, z1=z1, z2=z2, z3=z3, z4=z4)
-        y_fake = to_grayscale(y_fake)
-        y = to_grayscale(y)
+        y_fake = (y_fake > 0.5).float() 
+        y = (y > 0.5).float()
 
         x, z1, z2, z3, z4 = x*0.5+0.5, z1*0.5+0.5, z2*0.5+0.5, z3*0.5+0.5, z4*0.5+0.5 # Denormalise
 
