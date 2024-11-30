@@ -4,27 +4,8 @@ import os
 from torch.utils.data import Dataset, DataLoader
 from torchvision.utils import save_image
 import config
+from utils import to_grayscale
 
-def to_grayscale(image_tensor):
-    """
-    Converts an RGB image tensor to grayscale with a single channel.
-    Args:
-        image_tensor (torch.Tensor): Tensor of shape (C, H, W) or (N, C, H, W)
-    Returns:
-        torch.Tensor: Grayscale tensor of shape (1, H, W) or (N, 1, H, W)
-    """
-    if len(image_tensor.shape) == 4:  # Batch of images
-        r, g, b = image_tensor[:, 0, :, :], image_tensor[:, 1, :, :], image_tensor[:, 2, :, :]
-        gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
-        return gray.unsqueeze(1)  # Add channel dim
-    
-    elif len(image_tensor.shape) == 3:  # Single image
-        r, g, b = image_tensor[0, :, :], image_tensor[1, :, :], image_tensor[2, :, :]
-        gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
-        return gray.unsqueeze(0)  # Add channel dim
-    
-    else:
-        raise ValueError("Expected input to have 3 or 4 dimensions.")
 
 class Image_dataset(Dataset):
     def __init__(self, root_dir, inter_images=1, binarize_output=False, grayscale_all=False):

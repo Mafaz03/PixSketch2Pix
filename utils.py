@@ -8,21 +8,22 @@ import wandb
 def save_some_examples(gen, val_loader, epoch, folder):
     x,z1,z2,z3,z4,y = next(iter(val_loader))
     x,z1,z2,z3,z4,y = x.to(config.DEVICE), z1.to(config.DEVICE), z2.to(config.DEVICE), z3.to(config.DEVICE), z4.to(config.DEVICE), y.to(config.DEVICE)
-    x, z1, z2, z3, z4, y = x*0.5+0.5, z1*0.5+0.5, z2*0.5+0.5, z3*0.5+0.5, z4*0.5+0.5, y*0.5+0.5 # Denormalise
+    
     gen.eval()
     with torch.no_grad():
         y_fake =  gen(x, z1=z1, z2=z2, z3=z3, z4=z4)
-        y_fake = y_fake * 0.5 + 0.5  # remove normalization
+        y_fake = to_grayscale(y_fake)
+        y = to_grayscale(y)
 
-        x = x * 0.5 + 0.5
-        y = y * 0.5 + 0.5
+        x, z1, z2, z3, z4 = x*0.5+0.5, z1*0.5+0.5, z2*0.5+0.5, z3*0.5+0.5, z4*0.5+0.5 # Denormalise
+
         stacked_images = torch.cat((x,z1,z2,z3,z4,y,y_fake), dim=2)
         save_image(stacked_images, folder + f"/y_gen_{epoch}.png")
         save_image(x, folder + f"/input_{epoch}.png")
         wandb.log({
             "Generated Images": [wandb.Image(f"/content/evaluation/y_gen_{epoch}.png", caption=f"Epoch {epoch} - Generated")]
         })
-        if epoch == 1:
+        if epoch == 1 or epoch == 0:
             save_image(y, folder + f"/label_{epoch}.png")
     gen.train()
 
@@ -60,3 +61,24 @@ def image_to_line_art(image, thickenss=7):
     line_art_rgb = cv2.cvtColor(line_art, cv2.COLOR_GRAY2RGB)
 
     return line_art_rgb
+
+def to_grayscale(image_tensor):
+    """
+    Converts an RGB image tensor to grayscale with a single channel.
+    Args:
+        image_tensor (torch.Tensor): Tensor of shape (C, H, W) or (N, C, H, W)
+    Returns:
+        torch.Tensor: Grayscale tensor of shape (1, H, W) or (N, 1, H, W)
+    """
+    if len(image_tensor.shape) == 4:  # Batch of images
+        r, g, b = image_tensor[:, 0, :, :], image_tensor[:, 1, :, :], image_tensor[:, 2, :, :]
+        gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
+        return gray.unsqueeze(1)  # Add channel dim
+    
+    elif len(image_tensor.shape) == 3:  # Single image
+        r, g, b = image_tensor[0, :, :], image_tensor[1, :, :], image_tensor[2, :, :]
+        gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
+        return gray.unsqueeze(0)  # Add channel dim
+    
+    else:
+        raise ValueError("Expected input to have 3 or 4 dimensions.")
