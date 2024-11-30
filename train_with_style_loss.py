@@ -23,7 +23,7 @@ def calc_style_loss(y_fake, y, one_channel=False):
           y = y.repeat(1,3,1,1)
     s_loss = 0
     generated_features = vgg_model(y_fake * 0.5 + 0.5) # Remove unsqueeze when actuall training
-    style_image_features = vgg_model(y)
+    style_image_features = vgg_model(y * 0.5 + 0.5)
 
     for generated_feature, style_image_feature in zip(generated_features, style_image_features):
         batch_size, channel, height, width = generated_feature.shape
@@ -50,8 +50,9 @@ def calc_style_loss(y_fake, y, one_channel=False):
     return s_loss
 
 def calc_dice_score(y_fake, y):
-    y_fake = (y_fake / 255 > 0.5) * 1
-    y = (y / 255 > 0.5) * 1
+
+    y_fake = ((y_fake * 0.5 + 0.5) / 255 > 0.5) * 1
+    y = ((y * 0.5 + 0.5) / 255 > 0.5) * 1
 
     dice = Dice(average='micro')
     dice(y_fake, y)
@@ -150,7 +151,7 @@ def main():
     d_scaler = torch.amp.GradScaler("cuda")
     
     val_dataset = Image_dataset(root_dir=config.VAL_DIR, inter_images=4, binarize_output = True, grayscale_all=True)
-    val_loader = DataLoader(val_dataset, batch_size=config.VAL_BATCH_SIZE, shuffle=False)
+    val_loader = DataLoader(val_dataset, batch_size=config.VAL_BATCH_SIZE, shuffle=True)
     wandb.init()
     for epoch in range(config.NUM_EPOCHS):
         print("Epoch: ", epoch)
