@@ -6,11 +6,11 @@ import numpy as np
 import wandb
 
 def save_some_examples(gen, val_loader, epoch, folder):
-    x, z, y = next(iter(val_loader))
-    x, z, y = x.to(config.DEVICE), z.to(config.DEVICE), y.to(config.DEVICE)
+    x,z1,z2,z3,z4,y = next(iter(val_loader))
+    x,z1,z2,z3,z4,y = x.to(config.DEVICE), z1.to(config.DEVICE), z2.to(config.DEVICE), z3.to(config.DEVICE), z4.to(config.DEVICE), y.to(config.DEVICE)
     gen.eval()
     with torch.no_grad():
-        y_fake = gen(x, z)
+        y_fake =  gen(x, z1=z1, z2=z2, z3=z3, z4=z4)
         y_fake = y_fake * 0.5 + 0.5  # remove normalization
         save_image(y_fake, folder + f"/y_gen_{epoch}.png")
         save_image(x * 0.5 + 0.5, folder + f"/input_{epoch}.png")

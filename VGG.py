@@ -19,3 +19,10 @@ class VGG(nn.Module):
                 features.append(x)
             
         return features
+
+# Testing
+if __name__ == "__main__":
+    vgg = VGG()
+    x = torch.rand(2, 1, 100, 100)
+    result = vgg(x.repeat(1,3,1,1))
+    print(result)

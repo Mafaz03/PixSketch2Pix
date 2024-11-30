@@ -17,7 +17,10 @@ vgg_model = VGG().to(config.DEVICE).eval()
 
 torch.backends.cudnn.benchmark = True
 
-def calc_style_loss(y_fake, y):
+def calc_style_loss(y_fake, y, one_channel=False):
+    if one_channel:
+          y_fake = y_fake.repeat(1,3,1,1)
+          y = y.repeat(1,3,1,1)
     s_loss = 0
     generated_features = vgg_model(y_fake * 0.5 + 0.5) # Remove unsqueeze when actuall training
     style_image_features = vgg_model(y)
@@ -84,8 +87,8 @@ def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler,
             G_fake_loss = bce(D_fake, torch.ones_like(D_fake))
             L1 = l1_loss(y_fake, y) * config.L1_LAMBDA
             G_loss = G_fake_loss + L1
-            style_loss_G = calc_style_loss(y_fake, y)
-            dice_score_G = calc_style_loss(y_fake, y)
+            style_loss_G = calc_style_loss(y_fake, y, one_channel=True)
+            dice_score_G = calc_style_loss(y_fake, y, one_channel=True)
             total_loss = config.ALPHA * G_loss + config.BETA * style_loss_G
 
         gen.zero_grad()
@@ -123,8 +126,8 @@ def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler,
             )
 
 def main():
-    discriminator = Discriminator(in_channels=3).to(config.DEVICE)
-    generator = Generator(in_channels=3, inter_images=4, features=64).to(config.DEVICE)
+    discriminator = Discriminator(in_channels=1).to(config.DEVICE)
+    generator = Generator(in_channels=1, inter_images=4, features=64, out_channels=1).to(config.DEVICE)
 
     opt_disc = optim.Adam(discriminator.parameters(), lr=config.LEARNING_RATE, betas=(0.5, 0.999))
     opt_gen = optim.Adam(generator.parameters(), lr=config.LEARNING_RATE, betas=(0.5, 0.999))

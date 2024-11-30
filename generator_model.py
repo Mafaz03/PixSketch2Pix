@@ -143,6 +143,5 @@ if __name__ == "__main__":
     result = gen(x, z1=z1, z2=z2, z3=z3, z4=z4)
     print("Output: ", result.shape)
 
-
     # total_params = sum(p.numel() for p in gen.parameters())
     # print(f"Number of parameters: {total_params}")
