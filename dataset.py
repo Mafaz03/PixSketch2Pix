@@ -47,7 +47,7 @@ class Image_dataset(Dataset):
         
         if self.grayscale_all: 
             input_image = to_grayscale(input_image)
-            inter_image_dict = {inter_image_dict[i]: to_grayscale(inter_image_dict[i]) for i in inter_image_dict}
+            inter_image_dict = {key: to_grayscale(value) for key, value in inter_image_dict.items()}
             target_image = to_grayscale(target_image)
         
         return input_image, *list(inter_image_dict.values()), target_image

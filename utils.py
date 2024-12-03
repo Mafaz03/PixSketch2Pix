@@ -82,3 +82,54 @@ def to_grayscale(image_tensor):
     
     else:
         raise ValueError("Expected input to have 3 or 4 dimensions.")
+    
+
+evalscript_true_color = """
+//VERSION=3
+
+function setup() {
+    return {
+        input: [{
+            bands: ["B02", "B03", "B04"]
+        }],
+        output: {
+            bands: 3
+        }
+    };
+}
+
+function evaluatePixel(sample) {
+    return [sample.B04, sample.B03, sample.B02];
+}
+"""
+
+
+evalscript_ndvi = """
+    //VERSION=3
+
+    function setup() {
+        return {
+            input: [{bands: ["B08", "B04"]}],
+            output: {bands: 1, sampleType: "FLOAT32"}
+        };
+    }
+
+    function evaluatePixel(sample) {
+        return [(sample.B08 - sample.B04) / (sample.B08 + sample.B04)];
+    }
+"""
+
+evalscript_ndwi = """
+    //VERSION=3
+
+    function setup() {
+        return {
+            input: [{bands: ["B03", "B08"]}],
+            output: {bands: 1, sampleType: "FLOAT32"}
+        };
+    }
+
+    function evaluatePixel(sample) {
+        return [(sample.B03 - sample.B08) / (sample.B03 + sample.B08)];
+    }
+"""
