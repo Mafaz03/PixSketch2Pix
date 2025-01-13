@@ -23,15 +23,23 @@ class Generator(nn.Module):
 
         super().__init__()
         self.inter_images = inter_images
-    
-        self.initial = nn.Sequential(
-            nn.Conv2d((inter_images*in_channels)*2, features, kernel_size=4, stride=2, padding=1, padding_mode="reflect"),
-            nn.LeakyReLU(0.2)
-        )  
 
+        if inter_images > 0:
+            self.initial = nn.Sequential(
+                nn.Conv2d((in_channels*inter_images)*2, features, kernel_size=4, stride=2, padding=1, padding_mode="reflect"),
+                nn.LeakyReLU(0.2)
+            )  
+        else:
+            self.initial = nn.Sequential(
+                nn.Conv2d(in_channels, features, kernel_size=4, stride=2, padding=1, padding_mode="reflect"),
+                nn.ReLU()
+            )
+            inter_images = 1
+            
         self.down1 = Block(features, features*inter_images, down=True, act="relu", use_dropout=False) # 64
         self.res1 = ResidualBlock(features*inter_images)
         self.down2 = Block(features*inter_images, features*4, down=True, act="relu", use_dropout=False) # 32
+        
         self.res2 = ResidualBlock(features*4)
         self.down3 = Block(features*4, features*8, down=True, act="relu", use_dropout=False) # 16
         self.res3 = ResidualBlock(features*8)
@@ -72,16 +80,15 @@ class Generator(nn.Module):
     
     def forward(self, x: torch.Tensor, **z):
 
-        assert len(z) == self.inter_images, f"Number of inter_images was {self.inter_images}, but recieved {len(z)}"
-        z_concat = torch.cat([v for v in z.values()], dim=1)
-        x_repeat = x.repeat(1, z_concat.shape[1]//x.shape[1], 1, 1)
+        if self.inter_images > 0:
+            assert len(z) == self.inter_images, f"Number of inter_images was {self.inter_images}, but recieved {len(z)}"
+            z_concat = torch.cat([v for v in z.values()], dim=1)
+            x_repeat = x.repeat(1, z_concat.shape[1]//x.shape[1], 1, 1)
+            input_tensor = torch.cat([x_repeat, z_concat], dim=1)
+            input_tensor = torch.cat([x_repeat,z_concat], 1)
+        else: input_tensor = x
 
-        # print("z_concat: ", z_concat.shape)
-        # print("x_repeat: ", x_repeat.shape)
-
-        input_tensor = torch.cat([x_repeat, z_concat], dim=1)
-
-        d1 = self.initial(torch.cat([x_repeat,z_concat], 1))
+        d1 = self.initial(input_tensor)
         
         d2 = self.down1(d1)
 
@@ -133,15 +140,11 @@ class Generator(nn.Module):
 
 ## Testing
 if __name__ == "__main__":
-    gen = Generator(in_channels=1, inter_images=4, out_channels=1)
+    gen = Generator(in_channels=3, inter_images=0, out_channels=3)
     a = 256
-    x = torch.rand(2, 1, a, a)
-    z1 = torch.rand(2, 1, a, a)
-    z2 = torch.rand(2, 1, a, a)
-    z3 = torch.rand(2, 1, a, a)
-    z4 = torch.rand(2, 1, a, a)
-    result = gen(x, z1=z1, z2=z2, z3=z3, z4=z4)
+    x = torch.rand(2, 3, a, a)
+    result = gen(x, z1=x)
     print("Output: ", result.shape)
 
-    # total_params = sum(p.numel() for p in gen.parameters())
-    # print(f"Number of parameters: {total_params}")
+    total_params = sum(p.numel() for p in gen.parameters())
+    print(f"Number of parameters: {total_params}")
