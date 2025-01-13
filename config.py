@@ -5,8 +5,10 @@ import config
 from albumentations.core.transforms_interface import BasicTransform
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-TRAIN_DIR = "image_dataset/landslide/Train"
-VAL_DIR = "image_dataset/landslide/Test"
+# TRAIN_DIR = "image_dataset/landslide/Train"
+# VAL_DIR = "image_dataset/landslide/Test"
+TRAIN_DIR = "/kaggle/working/PixSketch2Pix/landscape_2/TRAIN"
+VAL_DIR = "/kaggle/working/PixSketch2Pix/landscape_2/TEST"
 LEARNING_RATE = 2e-4
 BATCH_SIZE = 1
 VAL_BATCH_SIZE = 5

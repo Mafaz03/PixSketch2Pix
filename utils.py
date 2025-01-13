@@ -4,25 +4,25 @@ from torchvision.utils import save_image
 import cv2
 import numpy as np
 import wandb
-# from sentinelhub import SHConfig
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import os
 import numpy as np
 import ee
 import geemap
 import cv2
 
-from sentinelhub import (
-    CRS,
-    BBox,
-    DataCollection,
-    DownloadRequest,
-    MimeType,
-    MosaickingOrder,
-    SentinelHubDownloadClient,
-    SentinelHubRequest,
-    bbox_to_dimensions,
-)
+# from sentinelhub import SHConfig
+# from sentinelhub import (
+#     CRS,
+#     BBox,
+#     DataCollection,
+#     DownloadRequest,
+#     MimeType,
+#     MosaickingOrder,
+#     SentinelHubDownloadClient,
+#     SentinelHubRequest,
+#     bbox_to_dimensions,
+# )
 
 
 def save_some_examples(gen, val_loader, epoch, folder):
