@@ -42,7 +42,7 @@ def save_some_examples(gen, val_loader, epoch, folder):
         save_image(stacked_images, folder + f"/y_gen_{epoch}.png")
         save_image(x, folder + f"/input_{epoch}.png")
         wandb.log({
-            "Generated Images": [wandb.Image(f"/content/evaluation/y_gen_{epoch}.png", caption=f"Epoch {epoch} - Generated")]
+            "Generated Images": [wandb.Image(f"/kaggle/working/evaluation/y_gen_{epoch}.png", caption=f"Epoch {epoch} - Generated")]
         })
         if epoch == 1 or epoch == 0:
             save_image(y, folder + f"/label_{epoch}.png")
