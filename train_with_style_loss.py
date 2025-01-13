@@ -50,15 +50,16 @@ def calc_style_loss(y_fake, y, one_channel=False):
     return s_loss
 
 def calc_dice_score(y_fake, y, one_channel=False):
+    y_fake, y = y_fake.cpu(), y.cpu()
     if one_channel:
-        y_fake = ((y_fake * 0.5 + 0.5) / 255 > 0.5) * 1
-        y = ((y * 0.5 + 0.5) / 255 > 0.5) * 1
+        y_fake = ((y_fake * 0.5 + 0.5) / 255 ) * 1
+        y = ((y * 0.5 + 0.5) / 255) * 1
 
         dice = Dice(average='micro')
         return dice(y_fake, y)
     
-    y_fake = (y_fake > 0.5).to(torch.int)
-    y = (y > 0.5).to(torch.int)
+    y_fake = (y_fake > 1).to(torch.int)
+    y = (y > 1).to(torch.int)
     dice = Dice(average='micro', num_classes=3)
     return dice(y_fake, y)
 
