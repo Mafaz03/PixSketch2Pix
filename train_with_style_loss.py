@@ -12,7 +12,7 @@ from torchvision.utils import save_image
 import wandb
 from VGG import VGG
 from torchmetrics.classification import Dice
-
+wandb.login(key="160fb2b5d5c5791978cce34bd4d7cf472ef06847")
 vgg_model = VGG().to(config.DEVICE).eval()
 
 torch.backends.cudnn.benchmark = True
@@ -92,8 +92,8 @@ def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler,
             G_fake_loss = bce(D_fake, torch.ones_like(D_fake))
             L1 = l1_loss(y_fake, y) * config.L1_LAMBDA
             G_loss = G_fake_loss + L1
-            style_loss_G = calc_style_loss(y_fake, y, one_channel=True)
-            dice_score_G = calc_dice_score(y_fake, y, one_channel=True)
+            style_loss_G = calc_style_loss(y_fake, y, one_channel=False)
+            dice_score_G = calc_dice_score(y_fake, y, one_channel=False)
             total_loss = config.ALPHA * G_loss + config.BETA * style_loss_G
 
         gen.zero_grad()
