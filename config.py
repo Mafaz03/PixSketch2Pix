@@ -18,8 +18,8 @@ LAMBDA_GP = 10
 NUM_EPOCHS = 500
 LOAD_MODEL = False
 SAVE_MODEL = True
-CHECKPOINT_DISC = "disc_LSM_v1.pth.tar"
-CHECKPOINT_GEN = "gen_LSM_v1.pth.tar"
+CHECKPOINT_DISC = "disc_super_res_v1.pth.tar"
+CHECKPOINT_GEN = "gen_super_res_v1.pth.tar"
 
 RESIZE = 2
 if RESIZE != None:

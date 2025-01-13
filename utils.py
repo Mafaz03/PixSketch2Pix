@@ -26,18 +26,19 @@ from sentinelhub import (
 
 
 def save_some_examples(gen, val_loader, epoch, folder):
-    x,z1,z2,z3,z4,y = next(iter(val_loader))
-    x,z1,z2,z3,z4,y = x.to(config.DEVICE), z1.to(config.DEVICE), z2.to(config.DEVICE), z3.to(config.DEVICE), z4.to(config.DEVICE), y.to(config.DEVICE)
+    x,y = next(iter(val_loader))
+    x,y = x.to(config.DEVICE), y.to(config.DEVICE) #z1.to(config.DEVICE), z2.to(config.DEVICE), z3.to(config.DEVICE), z4.to(config.DEVICE)
     
     gen.eval()
     with torch.no_grad():
-        y_fake =  gen(x, z1=z1, z2=z2, z3=z3, z4=z4)
-        y_fake = (y_fake > 0.5).float() 
-        y = (y > 0.5).float()
+        y_fake =  gen(x,)# z1=z1, z2=z2, z3=z3, z4=z4)
+        # y_fake = (y_fake > 0.5).float() 
+        # y = (y > 0.5).float()
 
-        x, z1, z2, z3, z4 = x*0.5+0.5, z1*0.5+0.5, z2*0.5+0.5, z3*0.5+0.5, z4*0.5+0.5 # Denormalise
+        # x, z1, z2, z3, z4 = x*0.5+0.5, z1*0.5+0.5, z2*0.5+0.5, z3*0.5+0.5, z4*0.5+0.5 # Denormalise
+        x = x*0.5+0.5
 
-        stacked_images = torch.cat((x,z1,z2,z3,z4,y,y_fake), dim=2)
+        stacked_images = torch.cat((x,y,y_fake), dim=2)
         save_image(stacked_images, folder + f"/y_gen_{epoch}.png")
         save_image(x, folder + f"/input_{epoch}.png")
         wandb.log({
