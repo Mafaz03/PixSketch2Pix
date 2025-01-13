@@ -4,7 +4,7 @@ from torchvision.utils import save_image
 import cv2
 import numpy as np
 import wandb
-from sentinelhub import SHConfig
+# from sentinelhub import SHConfig
 from dotenv import load_dotenv
 import os
 import numpy as np
