@@ -131,8 +131,8 @@ def train_fn(disc, gen, train_loader, opt_disc, opt_gen, l1_loss, bce, g_scaler,
             )
 
 def main():
-    discriminator = Discriminator(in_channels=1).to(config.DEVICE)
-    generator = Generator(in_channels=1, inter_images=0, features=64, out_channels=3).to(config.DEVICE)
+    discriminator = Discriminator(in_channels=3).to(config.DEVICE)
+    generator = Generator(in_channels=3, inter_images=0, features=64, out_channels=3).to(config.DEVICE)
 
     opt_disc = optim.Adam(discriminator.parameters(), lr=config.LEARNING_RATE, betas=(0.5, 0.999))
     opt_gen = optim.Adam(generator.parameters(), lr=config.LEARNING_RATE, betas=(0.5, 0.999))
