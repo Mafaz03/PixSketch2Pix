@@ -33,6 +33,14 @@ else:
 ALPHA = 1
 BETA = 0.01
 
+#################################################
+IN_CHANNELS = 3
+OUT_CHANNELS = 3
+INTER_IMAGES = 0
+BINARIZE = False
+GRAYSCALE_ALL = False
+#################################################
+
 class ThresholdTransform(BasicTransform):
     def __init__(self, thr_255, always_apply=True, p=1.0):
         super().__init__(always_apply, p)

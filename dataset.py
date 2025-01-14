@@ -26,15 +26,15 @@ class Image_dataset(Dataset):
         image_path = self.list_files[index]
         file_path = os.path.join(self.root_dir, image_path)
         image = np.array(Image.open(file_path))
-        input_image = image[:, :config.IMAGE_SIZE, :]
+        input_image = image[:, :config.IMAGE_RESIZED, :]
 
         inter_image_dict = {}
         for idx in range(self.inter_images):
-            start_idx = config.IMAGE_SIZE * (idx + 1)
-            end_idx = config.IMAGE_SIZE * (idx + 2)
+            start_idx = config.IMAGE_RESIZED * (idx + 1)
+            end_idx = config.IMAGE_RESIZED * (idx + 2)
             inter_image_dict[idx] = image[:, start_idx:end_idx, :]
 
-        target_image = image[:, config.IMAGE_SIZE * (self.inter_images + 1):, :]
+        target_image = image[:, config.IMAGE_RESIZED * (self.inter_images + 1):, :]
         input_image = config.transform_only_input(image=input_image)["image"]
 
         for idx, inter_image in enumerate(inter_image_dict.values()):
@@ -54,7 +54,7 @@ class Image_dataset(Dataset):
     
 ## Testing
 if __name__ == "__main__":
-    ds = Image_dataset(root_dir="image_dataset/landslide/Train", inter_images=4, binarize_output = True, grayscale_all=True)
+    ds = Image_dataset(root_dir="image_dataset/landslide/Train", inter_images=0, binarize_output = True, grayscale_all=True)
     dl = DataLoader(ds)
 
     x, z1, z2, z3, z4, y = next(iter(dl))

@@ -149,13 +149,20 @@ def main():
             config.CHECKPOINT_DISC, discriminator, opt_disc, config.LEARNING_RATE,
         )
     
-    train_dataset = Image_dataset(root_dir=config.TRAIN_DIR, inter_images=0, binarize_output = False, grayscale_all=False)
+    train_dataset = Image_dataset(root_dir=config.TRAIN_DIR, 
+                                    inter_images=config.INTER_IMAGES, binarize_output = config.BINARIZE,
+                                    grayscale_all=config.GRAYSCALE_ALL)
+
     train_loader = DataLoader(train_dataset, batch_size=config.BATCH_SIZE, shuffle=True, num_workers=config.NUM_WORKERS)
 
     g_scaler = torch.amp.GradScaler("cuda")
     d_scaler = torch.amp.GradScaler("cuda")
     
-    val_dataset = Image_dataset(root_dir=config.VAL_DIR, inter_images=0, binarize_output = False, grayscale_all=False)
+    val_dataset = Image_dataset(root_dir=config.VAL_DIR, 
+                                    inter_images=config.INTER_IMAGES,
+                                    binarize_output = config.BINARIZE, 
+                                    grayscale_all=config.GRAYSCALE_ALL)
+
     val_loader = DataLoader(val_dataset, batch_size=config.VAL_BATCH_SIZE, shuffle=True)
     wandb.init()
     for epoch in range(config.NUM_EPOCHS):
